@@ -36,7 +36,6 @@ def get_notion_data():
             time = props["时间"]["date"]["start"] if props["时间"]["date"] else ""
             source = props["来源"]["rich_text"][0]["plain_text"] if props["来源"]["rich_text"] else "未知来源"
             source = source.replace("=", "") # 去掉难看的等号
-            st.write(f"正在读取来源: '{source}'")
             
             results.append({
                 "发布时间": time,
