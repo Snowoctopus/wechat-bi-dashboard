@@ -96,9 +96,21 @@ st.title(f"{selected_company} 动态追踪面板" if selected_company != "全部
 
 # 6. 数据卡片区
 col1, col2, col3 = st.columns(3)
+
+# 动态计算经过的天数
+if time_range == "Last 7 days":
+    days = 7
+elif time_range == "Last 14 days":
+    days = 14
+else:
+    days = 30
+
+# 计算每周平均发文量 (保留1位小数)
+avg_per_week = len(filtered_df) / (days / 7) if days > 0 else 0
+
 col1.metric(label="Posts in period", value=f"{len(filtered_df)} 篇")
-col2.metric(label="Avg / week", value="--") 
-col3.metric(label="Total likes", value="--")
+col2.metric(label="Avg / week", value=f"{avg_per_week:.1f} 篇") 
+col3.metric(label="Total likes", value="--") # 这个依然需要等后端数据
 
 st.divider()
 
