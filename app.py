@@ -139,14 +139,23 @@ st.divider()
 # 8. 真实数据展示区
 st.subheader("📝 近期文章列表")
 if not filtered_df.empty:
-    st.dataframe(
-        filtered_df,
-        column_config={
-            "发布时间": st.column_config.DatetimeColumn("发布时间", format="YYYY-MM-DD HH:mm"),
-            "直达链接": st.column_config.LinkColumn("直达链接")
-        },
-        hide_index=True,
-        use_container_width=True
-    )
+    # 遍历数据框中的每一行，为每一篇文章生成一个独立卡片
+    for index, row in filtered_df.iterrows():
+        # st.container(border=True) 会自动生成一个带圆角边框的漂亮卡片
+        with st.container(border=True):
+            # 将卡片分为左右两列，比例大概是 5:1
+            col1, col2 = st.columns([5, 1])
+            
+            with col1:
+                # 顶部小字：标签和时间
+                st.caption(f"🏷️ **{row['竞品来源']}** &nbsp; | &nbsp; 🕒 {row['发布时间'].strftime('%Y-%m-%d %H:%M')}")
+                # 文章大标题（做成 Markdown 超链接，点击文字也能跳转）
+                st.markdown(f"#### [{row['文章标题']}]({row['直达链接']})")
+                
+            with col2:
+                # 敲几个换行，让右侧的按钮在垂直方向上居中对齐
+                st.write("") 
+                # 添加一个原生直达按钮
+                st.link_button("阅读原文 ↗", row['直达链接'], use_container_width=True)
 else:
     st.warning("当前筛选条件下没有数据。")
